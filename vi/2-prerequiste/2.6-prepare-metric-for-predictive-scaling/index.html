@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="vi" class="js csstransforms3d">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="Hugo 0.136.5">
+    <meta name="description" content="">
+<meta name="author" content="journeyoftheaverageguy@gmail.com">
+
+    <link rel="icon" href="/images/favicon.png" type="image/png">
+
+    <title>Chuẩn bị các metric cho Predictive scaling :: AWS System Manager</title>
+
+    
+    <link href="/css/nucleus.css?1730722269" rel="stylesheet">
+    <link href="/css/fontawesome-all.min.css?1730722269" rel="stylesheet">
+    <link href="/css/hybrid.css?1730722269" rel="stylesheet">
+    <link href="/css/featherlight.min.css?1730722269" rel="stylesheet">
+    <link href="/css/perfect-scrollbar.min.css?1730722269" rel="stylesheet">
+    <link href="/css/auto-complete.css?1730722269" rel="stylesheet">
+    <link href="/css/atom-one-dark-reasonable.css?1730722269" rel="stylesheet">
+    <link href="/css/theme.css?1730722269" rel="stylesheet">
+    <link href="/css/hugo-theme.css?1730722269" rel="stylesheet">
+    
+    <link href="/css/theme-workshop.css?1730722269" rel="stylesheet">
+    
+    
+
+    <script src="/js/jquery-3.3.1.min.js?1730722269"></script>
+
+    <style>
+      :root #header + #content > #left > #rlblock_left{
+          display:none !important;
+      }
+      
+    </style>
+    
+  </head>
+  <body class="" data-url="/vi/2-prerequiste/2.6-prepare-metric-for-predictive-scaling/">
+    <nav id="sidebar" class="showVisitedLinks">
+
+
+
+  <div id="header-wrapper">
+    <div id="header">
+      <a id="logo" href="/">
+
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+
+</a>
+
+    </div>
+    
+        <div class="searchbox">
+    <label for="search-by"><i class="fas fa-search"></i></label>
+    <input data-search-input id="search-by" type="search" placeholder="Search...">
+    <span data-search-clear=""><i class="fas fa-times"></i></span>
+</div>
+
+<script type="text/javascript" src="/js/lunr.min.js?1730722269"></script>
+<script type="text/javascript" src="/js/auto-complete.js?1730722269"></script>
+<script type="text/javascript">
+    
+        var baseurl = "http:\/\/localhost:1313\/\/vi";
+    
+</script>
+<script type="text/javascript" src="/js/search.js?1730722269"></script>
+
+    
+  </div>
+
+    <div class="highlightable">
+    <ul class="topics">
+
+        
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/1-introduce/" title="Giới thiệu" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/1-introduce/">
+           <b> 1. </b> Giới thiệu
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/" title="Các bước chuẩn bị" class="dd-item 
+        parent
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/">
+           <b> 2. </b> Các bước chuẩn bị
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.1-setup-network-infrastructure/" title="Thiết lập hạ tầng mạng" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/2.1-setup-network-infrastructure/">
+           <b> 2.1 </b> Thiết lập hạ tầng mạng
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.2-launch-ec2-instance/" title="Khởi tạo EC2 Instance" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/2.2-launch-ec2-instance/">
+           <b> 2.2 </b> Khởi tạo EC2 Instance
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.3-launch-a-database-instance-with-rds/" title="Khởi tạo Database Instance với RDS" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/2.3-launch-a-database-instance-with-rds/">
+           <b> 2.3 </b> Khởi tạo Database Instance với RDS
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.4-setup-data-for-database/" title="Cài đặt dữ liệu cho Database" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/2.4-setup-data-for-database/">
+           <b> 2.4 </b> Cài đặt dữ liệu cho Database
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.5-deploy-web-server/" title="Triển khai máy chủ web" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/2-prerequiste/2.5-deploy-web-server/">
+           <b> 2.5 </b> Triển khai máy chủ web
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/2-prerequiste/2.6-prepare-metric-for-predictive-scaling/" title="Chuẩn bị các metric cho Predictive scaling" class="dd-item 
+        
+        active
+        
+        ">
+      <a href="/vi/2-prerequiste/2.6-prepare-metric-for-predictive-scaling/">
+           <b> 2.6 </b> Chuẩn bị các metric cho Predictive scaling
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/3-create-launch-template/" title="Tạo Launch Template" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/3-create-launch-template/">
+           <b> 3. </b> Tạo Launch Template
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-setting-up-load-balancer/" title="Thiết lập Load Balancer" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-setting-up-load-balancer/">
+           <b> 4. </b> Thiết lập Load Balancer
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+      
+        <ul>
+          
+          
+            
+          
+          
+          
+        
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-setting-up-load-balancer/4.1-t%E1%BA%A1o-target-group/" title="Tạo Target Group" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-setting-up-load-balancer/4.1-t%E1%BA%A1o-target-group/">
+           <b> 4.1 </b> Tạo Target Group
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+            
+            
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/4-setting-up-load-balancer/4.2-t%E1%BA%A1o-target-group/" title="Tạo Load Balancer" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/4-setting-up-load-balancer/4.2-t%E1%BA%A1o-target-group/">
+           <b> 4.2 </b> Tạo Load Balancer
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+            
+          
+        
+        </ul>
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/5-test/" title="Kiểm tra kết quả" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/5-test/">
+           <b> 5. </b> Kiểm tra kết quả
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/6-create-auto-scaling-group/" title="Tạo Auto Scaling Group" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/6-create-auto-scaling-group/">
+           <b> 6. </b> Tạo Auto Scaling Group
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/7-test-solutions/" title="Kiểm thử giải pháp manual scaling" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/7-test-solutions/">
+           <b> 7. </b> Kiểm thử giải pháp manual scaling
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+          
+
+
+
+
+ 
+  
+    
+    <li data-nav-id="/vi/8-cleanup/" title="Dọn dẹp tài nguyên" class="dd-item 
+        
+        
+        
+        ">
+      <a href="/vi/8-cleanup/">
+           <b> 8. </b> Dọn dẹp tài nguyên
+          
+            <i class="fas fa-check read-icon"></i>
+          
+      </a>
+      
+              
+    </li>
+  
+ 
+
+          
+         
+    </ul>
+
+    
+    
+      <section id="shortcuts">
+        <h3>More</h3>
+        <ul>
+          
+              <li> 
+                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
+              </li>
+          
+        </ul>
+      </section>
+    
+
+    
+    <section id="prefooter">
+      <hr/>
+      <ul>
+      
+        <li>
+          <a class="padding">
+            <i class="fas fa-language fa-fw"></i>
+          <div class="select-style">
+            <select id="select-language" onchange="location = this.value;">
+          
+          
+          
+              
+              
+                  
+                    
+                    
+                      <option id="en" value="http://localhost:1313/2-prerequiste/2.6-prepare-metric-for-predictive-scaling/">English</option>
+                    
+                  
+              
+                  
+              
+          
+              
+              
+                  
+              
+                  
+                    
+                    
+                      <option id="vi" value="http://localhost:1313/vi/2-prerequiste/2.6-prepare-metric-for-predictive-scaling/" selected>Tiếng Việt</option>
+                    
+                  
+              
+          
+        </select>
+        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+          <g>
+            <g id="arrow-drop-down">
+              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+            </g>
+          </g>
+        </svg>
+        </div>
+        </a>
+        </li>
+      
+      
+      
+        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
+      
+      </ul>
+    </section>
+    
+    <section id="footer">
+      <left>
+    
+     <b> Workshop</b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Migrate" Alt="web counter"   border="0" /></a>  <br>
+     <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Total CLoud Journey" Alt="web counter"   border="0"   />
+     
+</left>
+<left>
+    <br>
+    <br>
+        <b> Last Updated </b> <br>
+        <i><font color=orange>30-01-2022</font></i>
+    </left>
+    <left>
+        <br>
+        <br>
+            <b> Team </b> <br>
+           
+            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Sử Trịnh  </a> <br>
+                <a href="https://www.linkedin.com/in/jotaguy"  style="color:orange">Gia Hưng </a> <br>
+                <a href="https://www.linkedin.com/in/hiepnguyendt"  style="color:orange">Thanh Hiệp </a>
+               
+        </i>
+        </left>
+
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    </section>
+  </div>
+</nav>
+
+
+
+
+        <section id="body">
+        <div id="overlay"></div>
+        <div class="padding highlightable">
+              
+              <div>
+                <div id="top-bar">
+                
+                
+                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+                    <span id="sidebar-toggle-span">
+                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                          <i class="fas fa-bars"></i>
+                        </a>
+                    </span>
+                  
+                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+                  
+                  <span class="links">
+                 
+                 
+                    
+          
+          
+            
+            
+          
+          
+            
+            
+          
+          
+            <a href='/vi/'>Deploying FCJ Management Application with Auto Scaling Group</a> > <a href='/vi/2-prerequiste/'>Các bước chuẩn bị</a> > Chuẩn bị các metric cho Predictive scaling
+          
+        
+          
+        
+          
+        
+                 
+                  </span>
+                </div>
+                
+                    <div class="progress">
+    <div class="wrapper">
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#chuẩn-bị-dữ-liệu-cho-predictive-scaling">Chuẩn bị dữ liệu cho Predictive scaling</a></li>
+        <li><a href="#các-bước-chuẩn-bị">Các bước chuẩn bị</a></li>
+        <li><a href="#tải-dữ-liệu-lên-cloudwatch">Tải dữ liệu lên CloudWatch</a></li>
+        <li><a href="#kiểm-tra">Kiểm tra</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+    </div>
+</div>
+
+                
+              </div>
+            </div>
+            
+        <div id="head-tags">
+        
+        </div>
+        
+        <div id="body-inner">
+          
+            <h1>
+              
+              Chuẩn bị các metric cho Predictive scaling
+            </h1>
+          
+
+        
+
+
+
+	<h3 id="chuẩn-bị-dữ-liệu-cho-predictive-scaling">Chuẩn bị dữ liệu cho Predictive scaling</h3>
+<p>Vì Predictive scaling cần phải có một lượng dữ liệu trong vòng hơn 2 ngày để có thể đưa ra được các dự đoán vào các ngày tiếp theo, mà ở đây chúng ta lại không có các dữ liệu đó cho nên là chúng ta sẽ cần phải chuẩn bị để giải lập một môi trường</p>
+<h3 id="các-bước-chuẩn-bị">Các bước chuẩn bị</h3>
+<p>Đầu tên là chúng ta sẽ tạo một folder mới với tên là <code>metric-preparation</code> và chuyển vào trong thư mục này</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  mkdir metric-preparation <span style="color:#f92672">&amp;&amp;</span> cd metric-preparation
+</span></span></code></pre></div><p>Sau đó là tải kịch bản để chuẩn bị các dữ liệu</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  curl -o prepare-metric-data.sh https://raw.githubusercontent.com/awslabs/ec2-spot-workshops/master/workshops/efficient-and-resilient-ec2-auto-scaling/prepare-metric-data.sh
+</span></span></code></pre></div><p><img alt="role" src="/images/2.prerequisite/01-vpc.png"></p>
+<p>Sau khi tải xong thì vào trong để thay đổi phần câu lệnh trong kịch bản</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  vim prepare-metric-data.sh
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  <span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span>set -e
+</span></span><span style="display:flex;"><span>file<span style="color:#f92672">=</span>$1
+</span></span><span style="display:flex;"><span>group<span style="color:#f92672">=</span>$2
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== Format metric file ===&#34;</span>
+</span></span><span style="display:flex;"><span>echo $file
+</span></span><span style="display:flex;"><span>echo $group
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>l<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>jq length $file<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> <span style="color:#f92672">[</span> $i -lt $l <span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>date -d <span style="color:#e6db74">&#34;</span>$<span style="color:#e6db74">[5*</span>$i<span style="color:#e6db74">] minutes ago&#34;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>cat $file | jq --argjson i $i --arg t <span style="color:#e6db74">&#34;</span>$time<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#39;.[$i].Timestamp |= $t&#39;</span> &gt; tmp.json <span style="color:#f92672">&amp;&amp;</span> mv tmp.json $file
+</span></span><span style="display:flex;"><span>i<span style="color:#f92672">=</span>$<span style="color:#f92672">[</span>$i+1<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;replace autoscaling group name..&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sed -i $file -e <span style="color:#e6db74">&#34;s/#ASGPLACEHOLDER#/</span>$group<span style="color:#e6db74">/g&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== Complete ===&#34;</span>
+</span></span></code></pre></div><p><img alt="role1" src="/images/2.prerequisite/02-CreateVPC.png"></p>
+<p>Sau khi chỉnh sửa xong thì giờ chúng ta tiến hành tải các dữ liệu chưa qua xử lý, Trước tiên là metric cho các instances.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  curl -o metric-cpu.json https://raw.githubusercontent.com/awslabs/ec2-spot-workshops/master/workshops/efficient-and-resilient-ec2-auto-scaling/metric-cpu.json
+</span></span></code></pre></div><p><img alt="role1" src="/images/2.prerequisite/040-iamrole.png"></p>
+<p>Dữ liệu cho CPU</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  curl -o metric-cpu.json https://raw.githubusercontent.com/awslabs/ec2-spot-workshops/master/workshops/efficient-and-resilient-ec2-auto-scaling/metric-cpu.json
+</span></span></code></pre></div><p><img alt="role1" src="/images/2.prerequisite/040-iamrole.png"></p>
+<p>Tiến hành sửa đổi lần lượt 2 loại dữ liệu này, đầu tiên là cho CPU trước</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  bash prepare-metric-data.sh metric-cpu.json FCJ-Management-ASG <span style="color:#f92672">&amp;&amp;</span> cat metric-cpu.json
+</span></span></code></pre></div><p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+<p><strong>Instances</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  bash prepare-metric-data.sh metric-instances.json FCJ-Management-ASG <span style="color:#f92672">&amp;&amp;</span> cat metric-instances.json
+</span></span></code></pre></div><p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+<!-- raw HTML omitted -->
+<p><strong>💡 Note</strong><br>
+Ở 2 lệnh ở trên đều xuất hiện tham số <strong>FCJ-Management-ASG</strong> thì nó chính là tên của Auto Scaling Group mà chúng ta sẽ tạo về sau, nên về sau thì bạn cần sẽ phải tạo ASG với cùng tên như thế. Còn không thì bạn nên thay một cái tên khác từ bây giờ.</p>
+<!-- raw HTML omitted -->
+<h3 id="tải-dữ-liệu-lên-cloudwatch">Tải dữ liệu lên CloudWatch</h3>
+<p>Trong Amazon Linux 2023, và dùng đúng AMI thì AWS CLI đã được cài đặt sẵn ở bên trong, lúc này thì chúng ta chỉ cần lấy ra để cấu hình lại các crediential là được. Nên nhớ là bạn phải có một IAM User đủ quyền để tải dữ liệu lên CloudWatch hoặc ít nhất là đủ quyền để làm bài workshop này.</p>
+<p>Vào trang IAM, vào thông tin IAM User và ấy Access Key Id và Serect Access Key</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  aws configure
+</span></span></code></pre></div><p>Tiến hành cấu hình</p>
+<p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+<p>Sau đó là tải 2 file dữ liệu mà chúng ta đã chuẩn bị trước đó lên trên CloudWatch</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  aws cloudwatch put-metric-data --namespace <span style="color:#e6db74">&#39;FCJ Management Custom Metrics&#39;</span> --metric-data file://metric-cpu.json
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>  aws cloudwatch put-metric-data --namespace <span style="color:#e6db74">&#39;FCJ Management Custom Metrics&#39;</span> --metric-data file://metric-instances.json 
+</span></span></code></pre></div><p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+<h3 id="kiểm-tra">Kiểm tra</h3>
+<p>Vào trong <strong>CloudWatch</strong> để kiểm tra kết quả</p>
+<ul>
+<li>
+<p>Tìm <strong>CloudWatch</strong></p>
+</li>
+<li>
+<p>Click để vào trong CloudWatch Console</p>
+<p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+</li>
+</ul>
+<p>Trong giao diện Console của <strong>CloudWatch</strong></p>
+<ul>
+<li>
+<p>Chọn <strong>All metrics</strong></p>
+</li>
+<li>
+<p>Chọn <strong>FCJ Management Custom Metrics</strong></p>
+<p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+</li>
+</ul>
+<p>Chọn AutoScalingGroupName</p>
+<p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+<p>Chọn tiếp 2 thông số như hình ở dưới, chờ một khoảng thời gian để nhận được kết quả.</p>
+<p><img alt="createpolicy" src="/images/2.prerequisite/041-iamrole.png"></p>
+
+
+
+
+
+<footer class=" footline" >
+	
+</footer>
+
+        
+        </div> 
+        
+
+      </div>
+
+    <div id="navigation">
+        
+        
+        
+        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                        
+                        
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                        
+                    
+                    
+
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+                        
+            
+            
+                
+                    
+                
+                
+
+                    
+                    
+                    
+
+                    
+            
+        
+                    
+            
+        
+        
+        
+
+
+	 
+	 
+		
+			<a class="nav nav-prev" href="/vi/2-prerequiste/2.5-deploy-web-server/" title="Triển khai máy chủ web"> <i class="fa fa-chevron-left"></i></a>
+		
+		
+			<a class="nav nav-next" href="/vi/3-create-launch-template/" title="Tạo Launch Template" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
+		
+	
+    </div>
+
+    </section>
+    
+    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+    </div>
+    <script src="/js/clipboard.min.js?1730722269"></script>
+    <script src="/js/perfect-scrollbar.min.js?1730722269"></script>
+    <script src="/js/perfect-scrollbar.jquery.min.js?1730722269"></script>
+    <script src="/js/jquery.sticky.js?1730722269"></script>
+    <script src="/js/featherlight.min.js?1730722269"></script>
+    <script src="/js/highlight.pack.js?1730722269"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script src="/js/modernizr.custom-3.6.0.js?1730722269"></script>
+    <script src="/js/learn.js?1730722269"></script>
+    <script src="/js/hugo-learn.js?1730722269"></script>
+
+    <link href="/mermaid/mermaid.css?1730722269" rel="stylesheet" />
+    <script src="/mermaid/mermaid.js?1730722269"></script>
+    <script>
+        mermaid.initialize({ startOnLoad: true });
+    </script>
+    <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-158079754-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+  </body>
+</html>
